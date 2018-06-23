@@ -20,8 +20,14 @@ describe("RoundTableImpl", () => {
         expect(() => {table.pickTwo(PickType.Adjacent)}).throw();
     });
 
+    it("Cannot put first", () => {
+        let table:RoundTable = new RoundTableImpl();
+        expect(() => {table.putBack([Coin.Head, Coin.Head])}).throw();
+    });
+
     it("Cannot put twice", () => {
         let table:RoundTable = new RoundTableImpl();
+        table.pickTwo(PickType.Adjacent);
         table.putBack([Coin.Head, Coin.Head]);
         expect(() => {table.putBack([Coin.Head, Coin.Head])}).throw();
     });
@@ -32,6 +38,15 @@ describe("RoundTableImpl", () => {
     });
 
     it("Should put back two coins, not three", () => {
+        let table:RoundTable = new RoundTableImpl();
+        table.pickTwo(PickType.Adjacent);
+        table.putBack([Coin.Head, Coin.Head]);
+        table.pickTwo(PickType.Adjacent);
+        table.putBack([Coin.Head, Coin.Head]);
+        expect(true).true;
+    });
+
+    it("Should work alternating (pick two, put back)", () => {
         let table:RoundTable = new RoundTableImpl();
         expect(() => {table.putBack([Coin.Head, Coin.Head, Coin.Head])}).throw();
     });

@@ -43,7 +43,7 @@ export class RoundTableImpl implements RoundTable {
     }
 
     putBack(coins: Coin[]) {
-        if(this.state !== State.Stable) throw new RoundTableError("Should pick the coins first.");
+        if(this.state !== State.Manipulating) throw new RoundTableError("Should pick the coins first.");
         if(coins.length !== 2) throw new RoundTableError("Should put back exactly two coins.");
 
         coins.map((val, ind) => {
@@ -52,7 +52,7 @@ export class RoundTableImpl implements RoundTable {
 
         this.manipulatedSlots = [];
 
-        this.state = State.Manipulating;
+        this.state = State.Stable;
         this.attempts++;
 
     }
