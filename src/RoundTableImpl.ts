@@ -70,7 +70,7 @@ export class RoundTableImpl implements RoundTable {
     }
 
     private debugLog(extra?: any) {
-        console.log('slots: ', this.slotText(), 'mani: ', this.manipulatedSlots, 'extra: ', extra);
+        //console.log('slots: ', this.slotText(), 'mani: ', this.manipulatedSlots, 'extra: ', extra);
     }
 
     private slotText() {
@@ -78,6 +78,6 @@ export class RoundTableImpl implements RoundTable {
     }
 
     private debugText(text) {
-        console.log(text);
+        //console.log(text);
     }
 }
