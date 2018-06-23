@@ -1,4 +1,5 @@
-import {Coin, PickType, RoundTable, RoundTableError} from "./RoundTable";
+import {PickType, RoundTable, RoundTableError} from "./RoundTable";
+import {Coin} from "./Coin";
 
 enum State {
     Stable,
@@ -15,17 +16,20 @@ export class RoundTableImpl implements RoundTable {
         this.slots = [];
         this.attempts = 0;
         for (let i=0; i<4 ; i++) {
-            this.slots[i] = Math.random()< .5 ? Coin.Head : Coin.Tail;
+            this.slots[i] = Math.random()< .5 ? Coin.Head() : Coin.Tail();
         }
         this.manipulatedSlots = [];
         this.state = State.Stable;
+        this.debugText('gameStarted');
     }
 
     isReady(): boolean {
+        this.debugText('asked');
         let pivotFace = this.slots[0];
         for (let i=1; i<4 ; i++) {
-            if(this.slots[i] !== pivotFace) return false;
+            if(this.slots[i].isNot(pivotFace)) return false;
         }
+        this.debugText('ready');
         return true;
     }
 
@@ -39,6 +43,8 @@ export class RoundTableImpl implements RoundTable {
         this.manipulatedSlots[0] = randomValue;
         this.manipulatedSlots[1] = (randomValue+next)%4;
 
+        this.debugLog();
+
         return this.manipulatedSlots.map(x => this.slots[x]);
     }
 
@@ -50,6 +56,8 @@ export class RoundTableImpl implements RoundTable {
             this.slots[this.manipulatedSlots[ind]] = val;
         });
 
+        this.debugLog(coins);
+
         this.manipulatedSlots = [];
 
         this.state = State.Stable;
@@ -59,5 +67,17 @@ export class RoundTableImpl implements RoundTable {
 
     getAttempts(): number {
         return this.attempts;
+    }
+
+    private debugLog(extra?: any) {
+        console.log('slots: ', this.slotText(), 'mani: ', this.manipulatedSlots, 'extra: ', extra);
+    }
+
+    private slotText() {
+        return "["+this.slots.map(c => c.text()).join(",")+"]";
+    }
+
+    private debugText(text) {
+        console.log(text);
     }
 }

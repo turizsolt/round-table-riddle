@@ -1,6 +1,7 @@
 import {expect} from 'chai';
 import {RoundTableImpl} from "../src/RoundTableImpl";
-import {Coin, PickType, RoundTable, RoundTableError} from "../src/RoundTable";
+import {PickType, RoundTable, RoundTableError} from "../src/RoundTable";
+import {Coin} from "../src/Coin";
 
 
 describe("RoundTableImpl", () => {
@@ -22,32 +23,32 @@ describe("RoundTableImpl", () => {
 
     it("Cannot put first", () => {
         let table:RoundTable = new RoundTableImpl();
-        expect(() => {table.putBack([Coin.Head, Coin.Head])}).throw();
+        expect(() => {table.putBack([Coin.Head(), Coin.Head()])}).throw();
     });
 
     it("Cannot put twice", () => {
         let table:RoundTable = new RoundTableImpl();
         table.pickTwo(PickType.Adjacent);
-        table.putBack([Coin.Head, Coin.Head]);
-        expect(() => {table.putBack([Coin.Head, Coin.Head])}).throw();
+        table.putBack([Coin.Head(), Coin.Head()]);
+        expect(() => {table.putBack([Coin.Head(), Coin.Head()])}).throw();
     });
 
     it("Should put back two coins, not one", () => {
         let table:RoundTable = new RoundTableImpl();
-        expect(() => {table.putBack([Coin.Head])}).throw();
+        expect(() => {table.putBack([Coin.Head()])}).throw();
     });
 
     it("Should put back two coins, not three", () => {
         let table:RoundTable = new RoundTableImpl();
         table.pickTwo(PickType.Adjacent);
-        table.putBack([Coin.Head, Coin.Head]);
+        table.putBack([Coin.Head(), Coin.Head()]);
         table.pickTwo(PickType.Adjacent);
-        table.putBack([Coin.Head, Coin.Head]);
+        table.putBack([Coin.Head(), Coin.Head()]);
         expect(true).true;
     });
 
     it("Should work alternating (pick two, put back)", () => {
         let table:RoundTable = new RoundTableImpl();
-        expect(() => {table.putBack([Coin.Head, Coin.Head, Coin.Head])}).throw();
+        expect(() => {table.putBack([Coin.Head(), Coin.Head(), Coin.Head()])}).throw();
     });
 });

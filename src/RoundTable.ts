@@ -1,12 +1,9 @@
+import {Coin} from "./Coin";
+
 export enum PickType {
     Adjacent,
     Diagonal
 };
-
-export enum Coin {
-    Head,
-    Tail
-}
 
 export class RoundTableError extends Error {};
 
