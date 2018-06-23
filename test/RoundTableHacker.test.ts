@@ -17,8 +17,12 @@ describe("RoundTableHacker", () => {
             sum += attempts;
             attemptHistory.push(attempts);
         }
-        console.log(max, sum/rounds, outOfTarget);
-        console.log(attemptHistory);
+        console.log("max: ", max);
+        console.log("avg: ", sum/rounds);
+        console.log("out: ", outOfTarget);
+        console.log(JSON.stringify(attemptHistory));
+
+        expect(outOfTarget).equal(0);
     });
 
 });
