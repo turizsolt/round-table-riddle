@@ -18,7 +18,6 @@ export class RoundTableHacker {
     }
 
     private fourUnknownButDifferent() {
-        this.debugText("fourUnknownButDifferent");
         const coins = this.table.pickTwo(PickType.Adjacent);
 
         if (coins[0].is(coins[1])) {
@@ -29,63 +28,49 @@ export class RoundTableHacker {
     }
 
     private twoSameAdjacent(coins: Coin[]) {
-        this.debugText("twoSameAdjacent");
         let pivot = coins[0];
         this.table.putBack(coins.map(c => c.flip()));
         if (this.table.isReady()) return;
 
-        const coins2 = this.table.pickTwo(PickType.Diagonal);
+        const nextCoins = this.table.pickTwo(PickType.Diagonal);
 
-        if (coins2[0].isNot(coins2[1])) {
+        if (nextCoins[0].isNot(nextCoins[1])) {
             this.twoDifferentDiagonalAndTwoPivotHidden(pivot.flip());
         } else {
-            this.twoSameDiagonalAndTwoDifferentHidden(coins2);
+            this.twoSameDiagonalAndTwoDifferentHidden(nextCoins);
         }
     }
 
-    private twoSameDiagonalAndTwoDifferentHidden(coins2: Coin[]) {
-        this.debugText("twoSameDiagonalAndTwoDifferentHidden");
-        this.table.putBack([coins2[0], coins2[1].flip()]);
+    private twoSameDiagonalAndTwoDifferentHidden(coins: Coin[]) {
+        this.table.putBack([coins[0], coins[1].flip()]);
+        const nextCoins = this.table.pickTwo(PickType.Adjacent);
 
-        const coins3 = this.table.pickTwo(PickType.Adjacent);
-
-        if (coins3[0].is(coins3[1])) {
-            this.twoSameAdjacentAndTwoOtherHidden(coins3);
+        if (nextCoins[0].is(nextCoins[1])) {
+            this.twoSameAdjacentAndTwoOtherHidden(nextCoins);
         } else {
-            this.twoDifferentAdjacentAndTwoDifferentHiddenSamesAreAdjacent(coins3);
+            this.twoDifferentAdjacentAndTwoDifferentHiddenSamesAreAdjacent(nextCoins);
         }
     }
 
-    private twoDifferentAdjacentAndTwoDifferentHiddenSamesAreAdjacent(coins3: Coin[]) {
-        this.debugText("twoDifferentAdjacentAndTwoDifferentHiddenSamesAreAdjacent");
-        this.table.putBack([coins3[1], coins3[0]]);
-        const coins4 = this.table.pickTwo(PickType.Diagonal);
-
-        this.twoSameDiagonalTwoOtherHidden(coins4);
+    private twoDifferentAdjacentAndTwoDifferentHiddenSamesAreAdjacent(coins: Coin[]) {
+        this.table.putBack([coins[1], coins[0]]);
+        const nextCoins = this.table.pickTwo(PickType.Diagonal);
+        this.twoSameDiagonalTwoOtherHidden(nextCoins);
     }
 
-    private twoSameDiagonalTwoOtherHidden(coins4: Coin[]) {
-        this.debugText("twoSameDiagonalTwoOtherHidden");
-        this.table.putBack(coins4.map(c => c.flip()));
-        if (!this.table.isReady()) throw new Error("Strategy 3 failed");
+    private twoSameDiagonalTwoOtherHidden(coins: Coin[]) {
+        this.table.putBack(coins.map(c => c.flip()));
     }
 
-    private twoSameAdjacentAndTwoOtherHidden(coins3: Coin[]) {
-        this.debugText("twoSameAdjacentAndTwoOtherHidden");
-        this.table.putBack(coins3.map(c => c.flip()));
-        if (!this.table.isReady()) throw new Error("Strategy 2 failed");
+    private twoSameAdjacentAndTwoOtherHidden(coins: Coin[]) {
+        this.table.putBack(coins.map(c => c.flip()));
     }
 
     private twoDifferentDiagonalAndTwoPivotHidden(pivot: Coin) {
-        this.debugText("twoDifferentDiagonalAndTwoPivotHidden");
         this.table.putBack([pivot, pivot]);
-        if (!this.table.isReady()) throw new Error("Strategy 1 failed");
     }
 
-    /***************/
-
     private twoDifferentAdjacent() {
-        this.debugText("twoDifferentAdjacent");
         this.table.putBack([Coin.Head(), Coin.Head()]);
         if(this.table.isReady()) return;
 
@@ -94,24 +79,24 @@ export class RoundTableHacker {
         if(coins[0].is(coins[1])) {
             this.twoSameDiagonalAndTwoDifferentHidden(coins);
         } else {
-            this.table.putBack([Coin.Head(), Coin.Head()]);
-
-            if(this.table.isReady()) return;
-
-            const coins2 = this.table.pickTwo(PickType.Diagonal);
-
-            if(coins2[0].isNot(coins2[1])) {
-                this.table.putBack([Coin.Head(), Coin.Head()]);
-                if (!this.table.isReady()) throw new Error("Strategy 4 failed");
-            } else {
-                this.twoSameDiagonalAndTwoDifferentHidden(coins2);
-            }
-
-
+            this.twoDiagonalDifferentAndHeadAndUnknownHidden();
         }
     }
 
-    private debugText(text) {
-        //console.log(text);
+    private twoDiagonalDifferentAndHeadAndUnknownHidden() {
+        this.table.putBack([Coin.Head(), Coin.Head()]);
+        if(this.table.isReady()) return;
+
+        const coins = this.table.pickTwo(PickType.Diagonal);
+
+        if (coins[0].isNot(coins[1])) {
+            this.twoDifferentDiagonalAndTwoHeadHidden();
+        } else {
+            this.twoSameDiagonalAndTwoDifferentHidden(coins);
+        }
+    }
+
+    private twoDifferentDiagonalAndTwoHeadHidden() {
+        this.table.putBack([Coin.Head(), Coin.Head()]);
     }
 }
